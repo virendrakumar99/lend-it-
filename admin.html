@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel – LendIt</title>
+    <meta name="description" content="LendIt Admin Dashboard – manage users, listings, and platform health.">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body data-page="admin">
+
+    <!-- Fixed top bar -->
+    <nav class="navbar scrolled" id="navbar" style="z-index:1001">
+        <div class="nav-inner">
+            <a href="index.html" class="logo"><span class="logo-icon">🔧</span><span class="logo-text">Lend<span
+                        class="logo-accent">It</span></span> <span
+                    style="font-size:0.65rem;background:rgba(255,193,7,0.2);color:#FFC107;padding:2px 8px;border-radius:50px;margin-left:8px;font-weight:700;">ADMIN</span></a>
+            <div style="flex:1"></div>
+            <div class="nav-cta">
+                <span style="font-size:0.82rem;color:#9B97B2">Logged in as <strong style="color:#fff"
+                        id="adminUserDisplay">Admin</strong></span>
+                <a href="dashboard.html" class="btn-ghost">← User View</a>
+                <button class="btn-primary" id="adminLogoutBtn"
+                    onclick="localStorage.clear();window.location.href='login.html'">Log Out</button>
+            </div>
+        </div>
+    </nav>
+
+
+    <div class="admin-layout">
+        <!-- Sidebar -->
+        <aside class="admin-sidebar">
+            <div class="admin-logo">
+                <span>🛡️</span>
+                <span>Admin Panel</span>
+            </div>
+            <div class="admin-version">v1.0 · LendIt Platform</div>
+
+            <div class="admin-nav">
+                <div class="admin-nav-section">Overview</div>
+                <button class="admin-nav-link active" data-panel="panelOverview">📊 Dashboard</button>
+                <button class="admin-nav-link" data-panel="panelRevenue">💰 Revenue</button>
+
+                <div class="admin-nav-section">Management</div>
+                <button class="admin-nav-link" data-panel="panelUsers">👥 Users</button>
+                <button class="admin-nav-link" data-panel="panelListings">📦 Listings</button>
+                <button class="admin-nav-link" data-panel="panelTransactions">💳 Transactions</button>
+
+                <div class="admin-nav-section">Moderation</div>
+                <button class="admin-nav-link" data-panel="panelReports">⚠️ Reports</button>
+                <button class="admin-nav-link" data-panel="panelDisputes">⚖️ Disputes</button>
+
+                <div class="admin-nav-section">System</div>
+                <button class="admin-nav-link" data-panel="panelSettings">⚙️ Settings</button>
+            </div>
+
+            <!-- Quick stats in sidebar -->
+            <div style="margin-top:32px;padding-top:24px;border-top:1px solid rgba(255,255,255,0.07)">
+                <div
+                    style="font-size:0.7rem;color:#555070;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px">
+                    Platform Health</div>
+                <div style="display:flex;flex-direction:column;gap:10px">
+                    <div style="display:flex;justify-content:space-between;font-size:0.82rem">
+                        <span style="color:#9B97B2">Uptime</span> <span
+                            style="color:#00C9A7;font-weight:700">99.97%</span>
+                    </div>
+                    <div style="display:flex;justify-content:space-between;font-size:0.82rem">
+                        <span style="color:#9B97B2">Active Sessions</span> <span
+                            style="color:#fff;font-weight:700">42</span>
+                    </div>
+                    <div style="display:flex;justify-content:space-between;font-size:0.82rem">
+                        <span style="color:#9B97B2">Escrow Balance</span> <span
+                            style="color:#00C9A7;font-weight:700">₹28,400</span>
+                    </div>
+                    <div style="display:flex;justify-content:space-between;font-size:0.82rem">
+                        <span style="color:#9B97B2">Flagged Items</span> <span
+                            style="color:#FF6B9D;font-weight:700">1</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main content -->
+        <main class="admin-main">
+
+            <!-- ===== OVERVIEW PANEL ===== -->
+            <div class="admin-panel" id="panelOverview" style="display:block">
+                <div class="admin-page-title">📊 Platform Overview</div>
+                <div class="admin-page-subtitle">Real-time snapshot of LendIt activity · All amounts in ₹ INR</div>
+
+                <div class="admin-stats">
+                    <div class="admin-stat-card">
+                        <div class="admin-stat-icon">👥</div>
+                        <div>
+                            <div class="admin-stat-value" id="adminTotalUsers">6</div>
+                            <div class="admin-stat-label">Total Users</div>
+                        </div>
+                    </div>
+                    <div class="admin-stat-card">
+                        <div class="admin-stat-icon">📦</div>
+                        <div>
+                            <div class="admin-stat-value" id="adminTotalListings">7</div>
+                            <div class="admin-stat-label">Total Listings</div>
+                        </div>
+                    </div>
+                    <div class="admin-stat-card">
+                        <div class="admin-stat-icon">💰</div>
+                        <div>
+                            <div class="admin-stat-value" id="adminTotalRevenue">₹41K</div>
+                            <div class="admin-stat-label">Total Revenue (INR)</div>
+                        </div>
+                    </div>
+                    <div class="admin-stat-card">
+                        <div class="admin-stat-icon">🔄</div>
+                        <div>
+                            <div class="admin-stat-value" id="adminActiveRentals">3</div>
+                            <div class="admin-stat-label">Active Rentals</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Revenue chart -->
+                <div class="admin-panel-card">
+                    <div class="admin-panel-header">
+                        <span class="admin-panel-title">💹 Monthly Revenue (₹ INR)</span>
+                        <span style="font-size:0.82rem;color:#00C9A7;font-weight:700">+24% vs last month</span>
+                    </div>
+                    <div style="padding:20px 24px">
+                        <div style="display:flex;align-items:flex-end;gap:8px;height:180px;padding:0 0 8px">
+                            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px">
+                                <div style="flex:1;width:100%;background:linear-gradient(to top,#6C63FF,#00C9A7);border-radius:6px 6px 0 0;opacity:0.7;min-height:30px"
+                                    title="Oct: ₹3.2K" style="height:45%"></div>
+                                <span style="font-size:0.65rem;color:#9B97B2">Oct</span>
+                            </div>
+                            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px">
+                                <div style="flex:1;width:100%;background:linear-gradient(to top,#6C63FF,#00C9A7);border-radius:6px 6px 0 0;opacity:0.75;height:55%"
+                                    title="Nov: ₹4.8K"></div>
+                                <span style="font-size:0.65rem;color:#9B97B2">Nov</span>
+                            </div>
+                            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px">
+                                <div style="flex:1;width:100%;background:linear-gradient(to top,#6C63FF,#00C9A7);border-radius:6px 6px 0 0;opacity:0.8;height:42%"
+                                    title="Dec: ₹3.9K"></div>
+                                <span style="font-size:0.65rem;color:#9B97B2">Dec</span>
+                            </div>
+                            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px">
+                                <div style="flex:1;width:100%;background:linear-gradient(to top,#6C63FF,#00C9A7);border-radius:6px 6px 0 0;opacity:0.85;height:68%"
+                                    title="Jan: ₹6.1K"></div>
+                                <span style="font-size:0.65rem;color:#9B97B2">Jan</span>
+                            </div>
+                            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px">
+                                <div style="flex:1;width:100%;background:linear-gradient(to top,#6C63FF,#00C9A7);border-radius:6px 6px 0 0;opacity:0.9;height:76%"
+                                    title="Feb: ₹7.4K"></div>
+                                <span style="font-size:0.65rem;color:#9B97B2">Feb</span>
+                            </div>
+                            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px">
+                                <div style="width:100%;background:linear-gradient(to top,#6C63FF,#00C9A7);border-radius:6px 6px 0 0;height:90%;opacity:1;min-height:20px"
+                                    title="Mar: ₹9.2K"></div>
+                                <span style="font-size:0.65rem;color:#6C63FF;font-weight:700">Mar ▲</span>
+                            </div>
+                        </div>
+                        <div
+                            style="display:flex;justify-content:space-between;font-size:0.82rem;color:#9B97B2;margin-top:4px;padding:0 4px">
+                            <span>Mar '24 – Mar '25</span>
+                            <span>Total: <strong style="color:#00C9A7">₹41,000</strong></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent activity -->
+                <div class="admin-panel-card">
+                    <div class="admin-panel-header">
+                        <span class="admin-panel-title">🕐 Recent Activity</span>
+                    </div>
+                    <div style="padding:8px">
+                        <div
+                            style="display:flex;align-items:center;gap:14px;padding:12px 16px;border-bottom:1px solid rgba(255,255,255,0.04)">
+                            <div
+                                style="width:36px;height:36px;background:rgba(255,255,255,0.04);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0">
+                                🔨</div>
+                            <div style="flex:1;font-size:0.88rem">Alice R. listed <strong>Power Drill</strong></div>
+                            <span style="font-size:0.75rem;color:#00C9A7;white-space:nowrap">2m ago</span>
+                        </div>
+                        <div
+                            style="display:flex;align-items:center;gap:14px;padding:12px 16px;border-bottom:1px solid rgba(255,255,255,0.04)">
+                            <div
+                                style="width:36px;height:36px;background:rgba(255,255,255,0.04);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0">
+                                💳</div>
+                            <div style="flex:1;font-size:0.88rem">Charlie M. paid <strong>₹499</strong> for Circular Saw
+                                rental</div>
+                            <span style="font-size:0.75rem;color:#6C63FF;white-space:nowrap">15m ago</span>
+                        </div>
+                        <div
+                            style="display:flex;align-items:center;gap:14px;padding:12px 16px;border-bottom:1px solid rgba(255,255,255,0.04)">
+                            <div
+                                style="width:36px;height:36px;background:rgba(255,255,255,0.04);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0">
+                                ⭐</div>
+                            <div style="flex:1;font-size:0.88rem">Bob K. gave Power Drill a 5-star review</div>
+                            <span style="font-size:0.75rem;color:#FFC107;white-space:nowrap">1h ago</span>
+                        </div>
+                        <div
+                            style="display:flex;align-items:center;gap:14px;padding:12px 16px;border-bottom:1px solid rgba(255,255,255,0.04)">
+                            <div
+                                style="width:36px;height:36px;background:rgba(255,255,255,0.04);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0">
+                                📍</div>
+                            <div style="flex:1;font-size:0.88rem">Geofence check-in confirmed for Pressure Washer</div>
+                            <span style="font-size:0.75rem;color:#00C9A7;white-space:nowrap">2h ago</span>
+                        </div>
+                        <div style="display:flex;align-items:center;gap:14px;padding:12px 16px">
+                            <div
+                                style="width:36px;height:36px;background:rgba(255,255,255,0.04);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0">
+                                ⚠️</div>
+                            <div style="flex:1;font-size:0.88rem">Pressure Washer flagged for review by system</div>
+                            <span style="font-size:0.75rem;color:#FF6B9D;white-space:nowrap">2h ago</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== USERS PANEL ===== -->
+            <div class="admin-panel" id="panelUsers">
+                <div class="admin-page-title">👥 User Management</div>
+                <div class="admin-page-subtitle">View, filter, and manage all registered users</div>
+
+                <div class="admin-panel-card">
+                    <div class="admin-panel-header">
+                        <span class="admin-panel-title">All Users</span>
+                        <div class="filter-tabs">
+                            <button class="filter-tab active" data-user-filter="all">All</button>
+                            <button class="filter-tab" data-user-filter="active">Active</button>
+                            <button class="filter-tab" data-user-filter="inactive">Suspended</button>
+                        </div>
+                        <input class="admin-search" id="userSearch" type="text" placeholder="🔍 Search users...">
+                    </div>
+                    <div style="overflow-x:auto">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>User</th>
+                                    <th>Role</th>
+                                    <th>Listings</th>
+                                    <th>Rentals</th>
+                                    <th>Earned (₹)</th>
+                                    <th>Rating</th>
+                                    <th>Status</th>
+                                    <th>Joined</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="usersTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== LISTINGS PANEL ===== -->
+            <div class="admin-panel" id="panelListings">
+                <div class="admin-page-title">📦 Listings Management</div>
+                <div class="admin-page-subtitle">Browse, approve, flag, or remove tool listings</div>
+
+                <div class="admin-panel-card">
+                    <div class="admin-panel-header">
+                        <span class="admin-panel-title">All Listings</span>
+                        <div class="filter-tabs">
+                            <button class="filter-tab active" data-listing-filter="all">All</button>
+                            <button class="filter-tab" data-listing-filter="available">Available</button>
+                            <button class="filter-tab" data-listing-filter="rented">Rented</button>
+                            <button class="filter-tab" data-listing-filter="flagged">⚠️ Flagged</button>
+                        </div>
+                    </div>
+                    <div style="overflow-x:auto">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Item</th>
+                                    <th>Owner</th>
+                                    <th>Price (₹)</th>
+                                    <th>Deposit (₹)</th>
+                                    <th>Category</th>
+                                    <th>Bookings</th>
+                                    <th>Status</th>
+                                    <th>Listed On</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="listingsTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== TRANSACTIONS PANEL ===== -->
+            <div class="admin-panel" id="panelTransactions">
+                <div class="admin-page-title">💳 Transactions</div>
+                <div class="admin-page-subtitle">All payments processed through LendIt escrow in ₹ INR</div>
+
+                <div class="admin-stats" style="grid-template-columns:repeat(3,1fr)">
+                    <div class="admin-stat-card">
+                        <div class="admin-stat-icon">💰</div>
+                        <div>
+                            <div class="admin-stat-value">₹41,000</div>
+                            <div class="admin-stat-label">Total Collected</div>
+                        </div>
+                    </div>
+                    <div class="admin-stat-card">
+                        <div class="admin-stat-icon">🔒</div>
+                        <div>
+                            <div class="admin-stat-value">₹28,400</div>
+                            <div class="admin-stat-label">In Escrow</div>
+                        </div>
+                    </div>
+                    <div class="admin-stat-card">
+                        <div class="admin-stat-icon">💸</div>
+                        <div>
+                            <div class="admin-stat-value">₹12,600</div>
+                            <div class="admin-stat-label">Paid Out</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="admin-panel-card">
+                    <div class="admin-panel-header">
+                        <span class="admin-panel-title">Recent Transactions</span>
+                    </div>
+                    <div style="overflow-x:auto">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Txn ID</th>
+                                    <th>From</th>
+                                    <th>Item</th>
+                                    <th>Amount (₹)</th>
+                                    <th>Method</th>
+                                    <th>Status</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td style="font-family:monospace;color:#9B97B2">#TXN-1042</td>
+                                    <td>Charlie M.</td>
+                                    <td>🔨 Power Drill</td>
+                                    <td style="color:#00C9A7;font-weight:700">₹1,547</td>
+                                    <td>UPI / GPay</td>
+                                    <td><span class="listing-status-badge lst-available">Completed</span></td>
+                                    <td style="color:#9B97B2">07 Mar 2025</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-family:monospace;color:#9B97B2">#TXN-1041</td>
+                                    <td>Bob K.</td>
+                                    <td>🌿 Lawn Mower</td>
+                                    <td style="color:#00C9A7;font-weight:700">₹4,694</td>
+                                    <td>Credit Card</td>
+                                    <td><span class="listing-status-badge lst-rented">In Escrow</span></td>
+                                    <td style="color:#9B97B2">06 Mar 2025</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-family:monospace;color:#9B97B2">#TXN-1040</td>
+                                    <td>Eve P.</td>
+                                    <td>🪜 6ft Ladder</td>
+                                    <td style="color:#00C9A7;font-weight:700">₹1,388</td>
+                                    <td>Paytm Wallet</td>
+                                    <td><span class="listing-status-badge lst-available">Completed</span></td>
+                                    <td style="color:#9B97B2">05 Mar 2025</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-family:monospace;color:#9B97B2">#TXN-1039</td>
+                                    <td>Alice R.</td>
+                                    <td>🪚 Circular Saw</td>
+                                    <td style="color:#00C9A7;font-weight:700">₹2,620</td>
+                                    <td>UPI / PhonePe</td>
+                                    <td><span class="listing-status-badge lst-flagged">Disputed</span></td>
+                                    <td style="color:#9B97B2">03 Mar 2025</td>
+                                </tr>
+                                <tr>
+                                    <td style="font-family:monospace;color:#9B97B2">#TXN-1038</td>
+                                    <td>Dave S.</td>
+                                    <td>🔧 Pressure Washer</td>
+                                    <td style="color:#00C9A7;font-weight:700">₹3,795</td>
+                                    <td>BHIM UPI</td>
+                                    <td><span class="listing-status-badge lst-available">Completed</span></td>
+                                    <td style="color:#9B97B2">01 Mar 2025</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== REPORTS PANEL ===== -->
+            <div class="admin-panel" id="panelReports">
+                <div class="admin-page-title">⚠️ Reports & Flags</div>
+                <div class="admin-page-subtitle">Items or users flagged by the system or other users</div>
+                <div class="admin-panel-card">
+                    <div class="admin-panel-header"><span class="admin-panel-title">Open Reports</span></div>
+                    <div style="padding:24px">
+                        <div
+                            style="background:rgba(255,107,157,0.08);border:1px solid rgba(255,107,157,0.25);border-radius:12px;padding:20px;display:flex;align-items:center;gap:16px">
+                            <span style="font-size:2rem">🔧</span>
+                            <div style="flex:1">
+                                <div style="font-weight:700;margin-bottom:4px">Pressure Washer – Dave S.</div>
+                                <div style="font-size:0.85rem;color:#9B97B2">Flagged: Listing photos may not match
+                                    actual item condition. Auto-flagged by system.</div>
+                                <div style="font-size:0.75rem;color:#FF6B9D;margin-top:4px">Flagged 2h ago · 1 report
+                                </div>
+                            </div>
+                            <div style="display:flex;gap:8px">
+                                <button class="btn-sm btn-sm-green"
+                                    onclick="showToast('Listing approved and un-flagged')">Approve</button>
+                                <button class="btn-sm btn-sm-danger"
+                                    onclick="showToast('Listing removed from platform')">Remove</button>
+                            </div>
+                        </div>
+                        <div style="color:#9B97B2;font-size:0.88rem;text-align:center;margin-top:24px">No other open
+                            reports 🎉</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== DISPUTES PANEL ===== -->
+            <div class="admin-panel" id="panelDisputes">
+                <div class="admin-page-title">⚖️ Disputes</div>
+                <div class="admin-page-subtitle">Active rental disputes requiring admin resolution</div>
+                <div class="admin-panel-card">
+                    <div class="admin-panel-header"><span class="admin-panel-title">Active Disputes</span></div>
+                    <div style="padding:24px">
+                        <div
+                            style="background:rgba(255,193,7,0.07);border:1px solid rgba(255,193,7,0.2);border-radius:12px;padding:20px;margin-bottom:16px">
+                            <div
+                                style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
+                                <div>
+                                    <div style="font-weight:700">Dispute #D-042 · Circular Saw Rental</div>
+                                    <div style="font-size:0.82rem;color:#9B97B2;margin-top:2px">Between: Alice R.
+                                        (lender) vs Eve P. (borrower)</div>
+                                </div>
+                                <span
+                                    style="background:rgba(255,193,7,0.15);color:#FFC107;padding:3px 10px;border-radius:50px;font-size:0.75rem;font-weight:700">Open</span>
+                            </div>
+                            <div style="font-size:0.87rem;color:#9B97B2;margin-bottom:16px">Borrower claims saw blade
+                                was already damaged before rental. Lender disputes this. Escrow of <strong
+                                    style="color:#FFC107">₹2,620</strong> on hold.</div>
+                            <div style="display:flex;gap:8px">
+                                <button class="btn-sm btn-sm-green"
+                                    onclick="showToast('Refund issued to borrower · Escrow released')">Refund
+                                    Borrower</button>
+                                <button class="btn-sm btn-sm-primary"
+                                    onclick="showToast('Payment released to lender · Case closed')">Release to
+                                    Lender</button>
+                                <button class="btn-sm" style="background:rgba(255,255,255,0.07);color:#9B97B2"
+                                    onclick="showToast('Requesting evidence from both parties')">Request
+                                    Evidence</button>
+                            </div>
+                        </div>
+                        <div style="color:#9B97B2;font-size:0.88rem;text-align:center">No other open disputes 🎉</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== REVENUE PANEL ===== -->
+            <div class="admin-panel" id="panelRevenue">
+                <div class="admin-page-title">💰 Revenue Analytics</div>
+                <div class="admin-page-subtitle">Platform earnings in ₹ INR (5% service fee per transaction)</div>
+
+                <div class="admin-stats" style="grid-template-columns:repeat(3,1fr)">
+                    <div class="admin-stat-card">
+                        <div class="admin-stat-icon">📈</div>
+                        <div>
+                            <div class="admin-stat-value">₹2,050</div>
+                            <div class="admin-stat-label">Platform Fees Earned</div>
+                        </div>
+                    </div>
+                    <div class="admin-stat-card">
+                        <div class="admin-stat-icon">📅</div>
+                        <div>
+                            <div class="admin-stat-value">₹924</div>
+                            <div class="admin-stat-label">This Month</div>
+                        </div>
+                    </div>
+                    <div class="admin-stat-card">
+                        <div class="admin-stat-icon">🎯</div>
+                        <div>
+                            <div class="admin-stat-value">₹5,000</div>
+                            <div class="admin-stat-label">Monthly Target</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="admin-panel-card">
+                    <div class="admin-panel-header"><span class="admin-panel-title">Top Earning Lenders (All
+                            Time)</span></div>
+                    <div style="overflow-x:auto">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Lender</th>
+                                    <th>Listings</th>
+                                    <th>Total Rentals</th>
+                                    <th>Gross Earnings (₹)</th>
+                                    <th>Platform Fee (₹)</th>
+                                    <th>Rating</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Alice R.</strong></td>
+                                    <td>4</td>
+                                    <td>23</td>
+                                    <td style="color:#00C9A7;font-weight:700">₹18,400</td>
+                                    <td>₹920</td>
+                                    <td>⭐ 4.9</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Dave S.</strong></td>
+                                    <td>3</td>
+                                    <td>11</td>
+                                    <td style="color:#00C9A7;font-weight:700">₹9,700</td>
+                                    <td>₹485</td>
+                                    <td>⭐ 4.6</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Charlie M.</strong></td>
+                                    <td>2</td>
+                                    <td>15</td>
+                                    <td style="color:#00C9A7;font-weight:700">₹6,200</td>
+                                    <td>₹310</td>
+                                    <td>⭐ 4.8</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Eve P.</strong></td>
+                                    <td>1</td>
+                                    <td>19</td>
+                                    <td style="color:#00C9A7;font-weight:700">₹4,800</td>
+                                    <td>₹240</td>
+                                    <td>⭐ 5.0</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Ankit K.</strong></td>
+                                    <td>3</td>
+                                    <td>5</td>
+                                    <td style="color:#00C9A7;font-weight:700">₹2,900</td>
+                                    <td>₹145</td>
+                                    <td>⭐ 4.9</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== SETTINGS PANEL ===== -->
+            <div class="admin-panel" id="panelSettings">
+                <div class="admin-page-title">⚙️ Platform Settings</div>
+                <div class="admin-page-subtitle">Configure LendIt platform behaviour and payment rules</div>
+
+                <div class="admin-panel-card">
+                    <div class="admin-panel-header"><span class="admin-panel-title">Payment Configuration</span></div>
+                    <div style="padding:24px;display:flex;flex-direction:column;gap:20px">
+                        <div style="display:flex;justify-content:space-between;align-items:center">
+                            <div>
+                                <div style="font-weight:600;margin-bottom:3px">Default Currency</div>
+                                <div style="font-size:0.82rem;color:#9B97B2">All transactions will be processed in this
+                                    currency</div>
+                            </div>
+                            <div
+                                style="background:rgba(0,201,167,0.12);border:1px solid rgba(0,201,167,0.3);color:#00C9A7;padding:8px 16px;border-radius:10px;font-weight:700">
+                                ₹ INR (Indian Rupee)</div>
+                        </div>
+                        <div style="display:flex;justify-content:space-between;align-items:center">
+                            <div>
+                                <div style="font-weight:600;margin-bottom:3px">Service Fee</div>
+                                <div style="font-size:0.82rem;color:#9B97B2">Platform commission per successful rental
+                                </div>
+                            </div>
+                            <div style="display:flex;align-items:center;gap:8px">
+                                <input type="number" value="5" min="1" max="20"
+                                    style="width:60px;padding:8px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:#fff;font-family:'Outfit',sans-serif;font-size:0.9rem;text-align:center">
+                                <span style="color:#9B97B2">%</span>
+                            </div>
+                        </div>
+                        <div style="display:flex;justify-content:space-between;align-items:center">
+                            <div>
+                                <div style="font-weight:600;margin-bottom:3px">UPI Payments</div>
+                                <div style="font-size:0.82rem;color:#9B97B2">Allow UPI as payment method</div>
+                            </div>
+                            <div style="width:44px;height:24px;background:var(--gradient);border-radius:50px;position:relative;cursor:pointer"
+                                onclick="showToast('UPI payments: Enabled')">
+                                <div
+                                    style="width:18px;height:18px;background:#fff;border-radius:50%;position:absolute;top:3px;right:3px;transition:all 0.2s">
+                                </div>
+                            </div>
+                        </div>
+                        <div style="display:flex;justify-content:space-between;align-items:center">
+                            <div>
+                                <div style="font-weight:600;margin-bottom:3px">Escrow Hold Period</div>
+                                <div style="font-size:0.82rem;color:#9B97B2">Hours after return before funds release
+                                </div>
+                            </div>
+                            <select
+                                style="padding:8px 16px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:#fff;font-family:'Outfit',sans-serif">
+                                <option>24 hours</option>
+                                <option selected>48 hours</option>
+                                <option>72 hours</option>
+                            </select>
+                        </div>
+                        <button class="btn-primary" style="align-self:flex-start;"
+                            onclick="showToast('Settings saved successfully ✅')">Save Settings</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="app.js?v=2"></script>
+    <script>
+        // ===== ADMIN PANEL LIVE DATA =====
+        const API = 'http://localhost:3000';
+        const token = localStorage.getItem('lendit_token');
+
+        function adminHeaders() {
+            return { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' };
+        }
+        async function get(path) {
+            const r = await fetch(API + path, { headers: adminHeaders() });
+            return r.json();
+        }
+        async function patch(path, body) {
+            const r = await fetch(API + path, { method: 'PATCH', headers: adminHeaders(), body: JSON.stringify(body) });
+            return r.json();
+        }
+
+        // Redirect non-admins
+        const adminUser = (() => { try { return JSON.parse(localStorage.getItem('lendit_user')); } catch { return null; } })();
+        if (!adminUser || adminUser.role !== 'admin') {
+            window.location.replace('login.html');
+        } else {
+            document.getElementById('adminUserDisplay').textContent = adminUser.name || 'Admin';
+        }
+
+        // Panel switching
+        document.querySelectorAll('.admin-nav-link').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.admin-nav-link').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                document.querySelectorAll('.admin-panel').forEach(p => p.style.display = 'none');
+                const panel = document.getElementById(btn.dataset.panel);
+                if (panel) panel.style.display = 'block';
+            });
+        });
+        document.querySelectorAll('.admin-panel').forEach(p => p.style.display = 'none');
+        document.getElementById('panelOverview').style.display = 'block';
+
+        // ===== LOAD STATS =====
+        async function loadStats() {
+            const d = await get('/api/admin/stats').catch(() => ({}));
+            const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+            set('adminTotalUsers', d.totalUsers ?? '—');
+            set('adminTotalListings', d.totalListings ?? '—');
+            set('adminActiveRentals', d.activeRentals ?? '—');
+            set('adminTotalRevenue', d.totalRevenue ? '₹' + Number(d.totalRevenue).toLocaleString('en-IN') : '₹0');
+
+            // Inject role breakdown chips under overview stats
+            const statsEl = document.querySelector('#panelOverview .admin-stats');
+            if (statsEl && d.borrowers !== undefined) {
+                const breakdown = document.createElement('div');
+                breakdown.style = 'grid-column:1/-1;display:flex;gap:12px;flex-wrap:wrap;margin-top:4px';
+                breakdown.innerHTML = `
+                <div style="padding:10px 20px;background:rgba(108,99,255,0.1);border:1px solid rgba(108,99,255,0.2);border-radius:12px;font-size:0.85rem">
+                    🛒 <strong style="color:#8B83FF">${d.borrowers}</strong> Borrowers
+                </div>
+                <div style="padding:10px 20px;background:rgba(0,201,167,0.1);border:1px solid rgba(0,201,167,0.2);border-radius:12px;font-size:0.85rem">
+                    💼 <strong style="color:#00C9A7">${d.lenders}</strong> Lenders
+                </div>
+                <div style="padding:10px 20px;background:rgba(255,179,71,0.1);border:1px solid rgba(255,179,71,0.2);border-radius:12px;font-size:0.85rem">
+                    🔄 <strong style="color:#FFB347">${d.both}</strong> Both Roles
+                </div>
+                <div style="padding:10px 20px;background:rgba(255,107,157,0.08);border:1px solid rgba(255,107,157,0.2);border-radius:12px;font-size:0.85rem">
+                    🏠 <strong style="color:#FF6B9D">${d.totalServices ?? 0}</strong> Service Listings
+                </div>
+                <div style="padding:10px 20px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;font-size:0.85rem">
+                    🔒 Escrow: <strong style="color:#00C9A7">₹${Number(d.escrowAmount || 0).toLocaleString('en-IN')}</strong>
+                </div>`;
+                statsEl.after(breakdown);
+            }
+        }
+
+        // ===== LOAD USERS =====
+        const roleColor = { borrower: '#8B83FF', lender: '#00C9A7', both: '#FFB347' };
+        const roleIcon = { borrower: '🛒', lender: '💼', both: '🔄' };
+
+        async function loadUsers() {
+            const d = await get('/api/admin/users').catch(() => ({ users: [] }));
+            const tbody = document.getElementById('usersTableBody');
+            if (!tbody) return;
+            const users = d.users || [];
+            if (!users.length) { tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;color:#9B97B2;padding:30px">No users found</td></tr>`; return; }
+            tbody.innerHTML = users.map(u => {
+                const ut = u.user_type || 'both';
+                const roleBadge = `<span style="background:${roleColor[ut]}22;color:${roleColor[ut]};padding:3px 10px;border-radius:50px;font-size:0.72rem;font-weight:700">${roleIcon[ut]} ${ut}</span>`;
+                const statusBadge = u.is_verified
+                    ? `<span class="listing-status-badge lst-available">Active</span>`
+                    : `<span class="listing-status-badge lst-flagged">Suspended</span>`;
+                const joined = u.created_at ? new Date(u.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: '2-digit' }) : '—';
+                return `<tr data-uid="${u.user_id}" data-status="${u.is_verified ? 1 : 0}">
+                <td>
+                    <div style="display:flex;align-items:center;gap:10px">
+                        <div style="width:34px;height:34px;background:var(--gradient);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.9rem;flex-shrink:0">${(u.name || '?')[0].toUpperCase()}</div>
+                        <div>
+                            <div style="font-weight:600;font-size:0.9rem">${u.name}</div>
+                            <div style="font-size:0.75rem;color:#9B97B2">${u.email}</div>
+                        </div>
+                    </div>
+                </td>
+                <td>${roleBadge}</td>
+                <td>${u.listing_count ?? 0}</td>
+                <td>${u.rental_count ?? 0}</td>
+                <td style="color:#00C9A7;font-weight:600">₹—</td>
+                <td>⭐ ${(u.rating_avg || 0).toFixed(1)}</td>
+                <td>${statusBadge}</td>
+                <td style="color:#9B97B2;font-size:0.82rem">${joined}</td>
+                <td>
+                    <div style="display:flex;gap:6px">
+                        <button class="btn-sm ${u.is_verified ? 'btn-sm-danger' : 'btn-sm-green'}" onclick="toggleUser(${u.user_id},${u.is_verified ? 0 : 1},this)">${u.is_verified ? 'Suspend' : 'Activate'}</button>
+                    </div>
+                </td>
+            </tr>`;
+            }).join('');
+
+            // Search filter
+            const searchEl = document.getElementById('userSearch');
+            if (searchEl) {
+                searchEl.addEventListener('input', () => {
+                    const q = searchEl.value.toLowerCase();
+                    tbody.querySelectorAll('tr').forEach(row => {
+                        row.style.display = row.textContent.toLowerCase().includes(q) ? '' : 'none';
+                    });
+                });
+            }
+            // Role filter tabs
+            document.querySelectorAll('[data-user-filter]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('[data-user-filter]').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    const f = btn.dataset.userFilter;
+                    tbody.querySelectorAll('tr').forEach(row => {
+                        if (f === 'all') { row.style.display = ''; return; }
+                        const isSuspended = row.dataset.status === '0';
+                        row.style.display = (f === 'inactive' ? isSuspended : !isSuspended) ? '' : 'none';
+                    });
+                });
+            });
+        }
+
+        async function toggleUser(uid, newStatus, btn) {
+            await patch(`/api/admin/users/${uid}/status`, { is_verified: newStatus });
+            btn.textContent = newStatus ? 'Suspend' : 'Activate';
+            btn.className = `btn-sm ${newStatus ? 'btn-sm-danger' : 'btn-sm-green'}`;
+            btn.closest('tr').dataset.status = newStatus;
+            // Update the status badge cell
+            const cells = btn.closest('tr').querySelectorAll('td');
+            cells[6].innerHTML = newStatus
+                ? `<span class="listing-status-badge lst-available">Active</span>`
+                : `<span class="listing-status-badge lst-flagged">Suspended</span>`;
+            showToast(newStatus ? 'User activated ✅' : 'User suspended 🚫');
+        }
+
+        // ===== LOAD LISTINGS =====
+        async function loadListings() {
+            const d = await get('/api/admin/listings').catch(() => ({ listings: [] }));
+            const tbody = document.getElementById('listingsTableBody');
+            if (!tbody) return;
+            const listings = d.listings || [];
+            if (!listings.length) { tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;color:#9B97B2;padding:30px">No listings yet</td></tr>`; return; }
+            tbody.innerHTML = listings.map(l => {
+                const statusClass = l.status === 'Available' ? 'lst-available'
+                    : l.status === 'Rented' ? 'lst-rented'
+                        : l.status === 'Flagged' ? 'lst-flagged' : 'lst-available';
+                const listed = l.created_at ? new Date(l.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: '2-digit' }) : '—';
+                return `<tr>
+                <td><div style="display:flex;align-items:center;gap:8px"><span style="font-size:1.4rem">${l.icon || '📦'}</span><strong>${l.title}</strong></div></td>
+                <td><div style="font-size:0.85rem">${l.owner_name}</div><div style="font-size:0.72rem;color:#9B97B2">${l.owner_email}</div></td>
+                <td style="color:#00C9A7;font-weight:600">₹${l.price_per_day}/day</td>
+                <td style="color:#9B97B2">₹${l.deposit_amount || 0}</td>
+                <td><span style="font-size:0.78rem;background:rgba(255,255,255,0.04);padding:3px 8px;border-radius:6px;color:#9B97B2">${l.category || 'Tool'}</span></td>
+                <td>${l.booking_count ?? 0}</td>
+                <td><span class="listing-status-badge ${statusClass}">${l.status || 'Available'}</span></td>
+                <td style="color:#9B97B2;font-size:0.82rem">${listed}</td>
+                <td>
+                    <div style="display:flex;gap:6px;flex-wrap:wrap">
+                        <button class="btn-sm btn-sm-green" onclick="flagListing(${l.item_id},'Available',this)">Approve</button>
+                        <button class="btn-sm btn-sm-danger" onclick="flagListing(${l.item_id},'Flagged',this)">Flag</button>
+                    </div>
+                </td>
+            </tr>`;
+            }).join('');
+
+            // Filter tabs
+            document.querySelectorAll('[data-listing-filter]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('[data-listing-filter]').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    const f = btn.dataset.listingFilter;
+                    tbody.querySelectorAll('tr').forEach(row => {
+                        if (f === 'all') { row.style.display = ''; return; }
+                        const txt = row.textContent.toLowerCase();
+                        row.style.display = txt.includes(f) ? '' : 'none';
+                    });
+                });
+            });
+        }
+
+        async function flagListing(id, status, btn) {
+            await patch(`/api/admin/listings/${id}/status`, { status });
+            showToast(status === 'Flagged' ? 'Listing flagged ⚠️' : 'Listing approved ✅');
+            loadListings();
+        }
+
+        // ===== LOAD TRANSACTIONS =====
+        async function loadTransactions() {
+            const d = await get('/api/admin/transactions').catch(() => ({ transactions: [] }));
+            const tbody = document.querySelector('#panelTransactions table tbody');
+            if (!tbody || !(d.transactions || []).length) return;
+            tbody.innerHTML = d.transactions.map((t, i) => `<tr>
+            <td style="font-family:monospace;color:#9B97B2">#TXN-${1000 + i + t.booking_id}</td>
+            <td>${t.borrower_name}</td>
+            <td>${t.icon || '📦'} ${t.item_title}</td>
+            <td style="color:#00C9A7;font-weight:700">₹${Number(t.total_price || 0).toLocaleString('en-IN')}</td>
+            <td>UPI / INR</td>
+            <td><span class="listing-status-badge ${t.status === 'Completed' ? 'lst-available' : t.status === 'Active' ? 'lst-rented' : 'lst-flagged'}">${t.status || 'Pending'}</span></td>
+            <td style="color:#9B97B2">${t.created_at ? new Date(t.created_at).toLocaleDateString('en-IN') : '—'}</td>
+        </tr>`).join('');
+        }
+
+        // Fire all on load
+        document.addEventListener('DOMContentLoaded', () => {
+            loadStats();
+            loadUsers();
+            loadListings();
+            loadTransactions();
+        });
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discover Tools – LendIt</title>
+    <meta name="description" content="Browse tools available for rent near you on LendIt's live map.">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+</head>
+
+<body data-page="discover">
+
+    <nav class="navbar scrolled" id="navbar">
+        <div class="nav-inner">
+            <a href="index.html" class="logo"><span class="logo-icon">🔧</span><span class="logo-text">Lend<span
+                        class="logo-accent">It</span></span></a>
+            <ul class="nav-links">
+                <li><a href="index.html#how-it-works">How It Works</a></li>
+                <li><a href="discover.html">Discover</a></li>
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="chat.html">Messages</a></li>
+            </ul>
+            <div class="nav-cta">
+                <a href="dashboard.html" class="btn-ghost">Dashboard</a>
+                <a href="login.html" class="btn-primary">List a Tool</a>
+            </div>
+            <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+        </div>
+        <div class="mobile-menu" id="mobileMenu">
+            <a href="index.html">Home</a>
+            <a href="dashboard.html">Dashboard</a>
+            <a href="chat.html">Messages</a>
+        </div>
+    </nav>
+
+    <div class="discover-page">
+        <!-- Sidebar -->
+        <aside class="discover-sidebar">
+            <div class="discover-sidebar-top">
+                <div class="search-bar">
+                    <span style="color:#9B97B2">🔍</span>
+                    <input type="text" id="searchInput" placeholder="Search tools, items...">
+                </div>
+                <div class="radius-pills">
+                    <div class="radius-pill" data-radius="2">2 km</div>
+                    <div class="radius-pill active" data-radius="5">5 km</div>
+                    <div class="radius-pill" data-radius="10">10 km</div>
+                    <div class="radius-pill" data-radius="20">20 km</div>
+                </div>
+            </div>
+            <div class="discover-items-list" id="discoverItemsList">
+                <!-- Items injected by JS -->
+            </div>
+        </aside>
+
+        <!-- Map -->
+        <div id="fullMap" class="full-map"></div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="app.js?v=42"></script>
+</body>
+
+</html>

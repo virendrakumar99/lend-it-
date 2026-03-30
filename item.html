@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tool Detail – LendIt</title>
+    <meta name="description" content="View details and book a tool rental on LendIt.">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body data-page="item">
+
+    <nav class="navbar scrolled" id="navbar">
+        <div class="nav-inner">
+            <a href="index.html" class="logo"><span class="logo-icon">🔧</span><span class="logo-text">Lend<span
+                        class="logo-accent">It</span></span></a>
+            <ul class="nav-links">
+                <li><a href="index.html#how-it-works">How It Works</a></li>
+                <li><a href="discover.html">Discover</a></li>
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="chat.html">Messages</a></li>
+            </ul>
+            <div class="nav-cta">
+                <a href="discover.html" class="btn-ghost">← Back</a>
+                <a href="login.html" class="btn-primary">Sign Up Free</a>
+            </div>
+            <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+        </div>
+        <div class="mobile-menu" id="mobileMenu">
+            <a href="discover.html">← Discover</a>
+            <a href="dashboard.html">Dashboard</a>
+            <a href="login.html" class="btn-primary-mobile">Get Started</a>
+        </div>
+    </nav>
+
+    <div class="detail-page">
+        <!-- Breadcrumb -->
+        <div style="display:flex;align-items:center;gap:8px;font-size:0.85rem;color:#9B97B2;margin-bottom:32px">
+            <a href="index.html" style="color:#9B97B2;transition:color 0.2s" onmouseover="this.style.color='#fff'"
+                onmouseout="this.style.color='#9B97B2'">Home</a>
+            <span>›</span>
+            <a href="discover.html" style="color:#9B97B2;transition:color 0.2s" onmouseover="this.style.color='#fff'"
+                onmouseout="this.style.color='#9B97B2'">Discover</a>
+            <span>›</span>
+            <span id="breadcrumbTitle" style="color:#e8e6f0">Power Drill</span>
+        </div>
+
+        <div class="detail-grid">
+            <!-- Left: Item Info -->
+            <div>
+                <div class="detail-img" id="itemIconWrap">
+                    <span id="itemIcon" style="font-size:6rem">🔨</span>
+                </div>
+
+                <div style="margin-top:28px">
+                    <span class="detail-tag">✅ Available Now</span>
+                    <h1 class="detail-title" id="itemTitle">Power Drill</h1>
+                    <p class="detail-owner">Lender: <strong id="itemOwner">Alice</strong></p>
+                    <div style="display:flex;gap:16px;margin-bottom:24px;font-size:0.9rem;color:#9B97B2">
+                        <span id="itemRating">⭐ 4.9 rating</span>
+                        <span id="itemDistance">📍 0.3 km away</span>
+                        <span>🏷️ 23 rentals</span>
+                    </div>
+                    <p class="detail-description">A powerful and reliable tool, perfect for your weekend project.
+                        Well-maintained and ready to use. The lender will provide any necessary accessories and give a
+                        quick demo if needed.</p>
+                    <div class="detail-features">
+                        <span class="detail-feature-tag">✓ Cleaned after each use</span>
+                        <span class="detail-feature-tag">✓ Accessories included</span>
+                        <span class="detail-feature-tag">✓ Pick-up &amp; drop-off</span>
+                        <span class="detail-feature-tag">✓ Escrow protected</span>
+                    </div>
+                </div>
+
+                <!-- Lender Card -->
+                <div class="panel" style="margin-top:28px">
+                    <div class="panel-header">
+                        <span class="panel-title">About the Lender</span>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:16px">
+                        <div class="author-avatar" style="width:56px;height:56px;font-size:1.4rem">A</div>
+                        <div>
+                            <div style="font-weight:700;font-size:1.05rem" id="lenderName">Alice R.</div>
+                            <div style="font-size:0.85rem;color:#9B97B2;margin-top:2px">⭐ 4.9 · Top Lender · 47 rentals
+                            </div>
+                            <div style="font-size:0.82rem;color:#9B97B2;margin-top:4px">Member since Jan 2023 · Delhi,
+                                India</div>
+                        </div>
+                        <a href="chat.html" class="btn-sm btn-sm-primary" style="margin-left:auto">💬 Message</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: Booking Card -->
+            <div class="booking-card">
+                <div class="price-display">
+                    <span class="price-big" id="itemPrice">$5</span>
+                    <span class="price-unit"> / day</span>
+                    <div class="deposit-text" id="itemDeposit">Security deposit: $50 (refundable)</div>
+                </div>
+
+                <div class="date-inputs">
+                    <div class="date-input-wrap">
+                        <label>Start Date</label>
+                        <input type="date" id="startDate">
+                    </div>
+                    <div class="date-input-wrap">
+                        <label>End Date</label>
+                        <input type="date" id="endDate">
+                    </div>
+                </div>
+
+                <div class="booking-total">
+                    <span>Estimated Total</span>
+                    <span id="bookingTotal">Select dates</span>
+                </div>
+
+                <button class="btn-primary"
+                    style="width:100%;justify-content:center;padding:16px;font-size:1rem;border-radius:12px"
+                    id="bookBtn">
+                    🔒 Request to Borrow
+                </button>
+
+                <div style="margin-top:16px;font-size:0.8rem;color:#9B97B2;text-align:center;line-height:1.6">
+                    You won't be charged until the lender accepts your request.<br>
+                    Funds held securely in escrow until return.
+                </div>
+
+                <div
+                    style="border-top:1px solid var(--card-border);margin-top:20px;padding-top:16px;display:flex;flex-direction:column;gap:8px">
+                    <div style="display:flex;justify-content:space-between;font-size:0.85rem">
+                        <span style="color:#9B97B2">Rental fee</span> <span id="rentalFeeDisplay">-</span>
+                    </div>
+                    <div style="display:flex;justify-content:space-between;font-size:0.85rem">
+                        <span style="color:#9B97B2">Security deposit</span> <span id="depositDisplay">-</span>
+                    </div>
+                    <div style="display:flex;justify-content:space-between;font-size:0.85rem">
+                        <span style="color:#9B97B2">Service fee (5%)</span> <span id="serviceFeeDisplay">-</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js?v=42"></script>
+    <script>
+        // Inline script removed. All logic is handled in app.js.
+    </script>
+</body>
+
+</html>

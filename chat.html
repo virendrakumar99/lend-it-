@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Messages – LendIt</title>
+    <meta name="description" content="Real-time chat with your lenders and borrowers on LendIt.">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body data-page="chat">
+
+    <nav class="navbar scrolled" id="navbar">
+        <div class="nav-inner">
+            <a href="index.html" class="logo"><span class="logo-icon">🔧</span><span class="logo-text">Lend<span
+                        class="logo-accent">It</span></span></a>
+            <ul class="nav-links">
+                <li><a href="index.html#how-it-works">How It Works</a></li>
+                <li><a href="discover.html">Discover</a></li>
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="chat.html">Messages</a></li>
+            </ul>
+            <div class="nav-cta">
+                <a href="dashboard.html" class="btn-ghost">Dashboard</a>
+                <a href="discover.html" class="btn-primary">Browse Tools</a>
+            </div>
+            <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+        </div>
+        <div class="mobile-menu" id="mobileMenu">
+            <a href="index.html">Home</a>
+            <a href="discover.html">Discover</a>
+            <a href="dashboard.html">Dashboard</a>
+        </div>
+    </nav>
+
+    <div class="chat-layout">
+        <!-- Chat Sidebar -->
+        <aside class="chat-sidebar">
+            <div class="chat-sidebar-header">
+                💬 Messages
+            </div>
+            <div class="conversation-list" id="conversationList">
+                <!-- Injected by JS -->
+            </div>
+        </aside>
+
+        <!-- Chat Main -->
+        <main class="chat-main">
+            <div class="chat-main-header">
+                <div class="conversation-avatar" style="width:40px;height:40px;font-size:0.9rem">A</div>
+                <div>
+                    <div class="chat-user-name" id="chatName">Alice</div>
+                    <div class="chat-user-status">● Online · re: Power Drill</div>
+                </div>
+                <div style="margin-left:auto;display:flex;gap:10px">
+                    <button class="btn-sm btn-sm-green" onclick="showToast('📍 Geofence check-in simulated!')">📍 Check
+                        In</button>
+                    <a href="dashboard.html" class="btn-sm btn-sm-primary">📋 Booking</a>
+                </div>
+            </div>
+
+            <div class="messages-area" id="messagesArea">
+                <!-- Injected by JS -->
+            </div>
+
+            <div class="chat-input-area">
+                <input type="text" class="chat-input" id="chatInput" placeholder="Type a message... (Enter to send)">
+                <button class="send-btn" id="sendBtn" title="Send">➤</button>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+    <script src="app.js?v=2"></script>
+</body>
+
+
+</html>

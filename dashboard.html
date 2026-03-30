@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard – LendIt</title>
+    <meta name="description" content="Manage your bookings, listings and earnings on LendIt.">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* ===== ROLE BADGE ===== */
+        .role-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .role-badge.borrower {
+            background: rgba(0, 201, 167, 0.15);
+            color: #00C9A7;
+            border: 1px solid rgba(0, 201, 167, 0.3);
+        }
+
+        .role-badge.lender {
+            background: rgba(108, 99, 255, 0.15);
+            color: #8B83FF;
+            border: 1px solid rgba(108, 99, 255, 0.3);
+        }
+
+        .role-badge.both {
+            background: rgba(255, 179, 71, 0.15);
+            color: #FFB347;
+            border: 1px solid rgba(255, 179, 71, 0.3);
+        }
+
+        /* ===== SWITCH TABS at top ===== */
+        .dash-mode-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 28px;
+            padding: 6px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 14px;
+            width: fit-content;
+        }
+
+        .dash-mode-tab {
+            padding: 8px 20px;
+            border-radius: 10px;
+            border: none;
+            font-family: Outfit, sans-serif;
+            font-size: 0.88rem;
+            font-weight: 600;
+            cursor: pointer;
+            background: transparent;
+            color: var(--text-muted);
+            transition: all .2s;
+        }
+
+        .dash-mode-tab.active {
+            background: var(--gradient);
+            color: #fff;
+        }
+
+        /* ===== BOOKED CARDS ===== */
+        .booked-grid {
+            display: grid;
+            gap: 16px;
+        }
+
+        .booked-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 20px 24px;
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .booked-card-icon {
+            font-size: 2.2rem;
+            flex-shrink: 0;
+        }
+
+        .booked-card-info {
+            flex: 1;
+        }
+
+        .booked-card-title {
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--text);
+            margin-bottom: 4px;
+        }
+
+        .booked-card-meta {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+        }
+
+        .booked-card-price {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #00C9A7;
+        }
+
+        /* ===== EXPLORE CTA ===== */
+        .explore-cta {
+            margin-top: 32px;
+            padding: 32px;
+            border-radius: 20px;
+            background: linear-gradient(135deg, rgba(108, 99, 255, 0.12), rgba(0, 201, 167, 0.08));
+            border: 1px solid rgba(108, 99, 255, 0.25);
+            text-align: center;
+        }
+
+        .explore-cta h3 {
+            margin: 0 0 8px;
+            font-size: 1.2rem;
+            color: var(--text);
+        }
+
+        .explore-cta p {
+            margin: 0 0 20px;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .service-quick-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 16px;
+        }
+
+        .svc-chip {
+            padding: 8px 16px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid var(--card-border);
+            color: var(--text-muted);
+            font-size: 0.82rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all .2s;
+        }
+
+        .svc-chip:hover {
+            background: rgba(108, 99, 255, 0.15);
+            color: #8B83FF;
+            border-color: rgba(108, 99, 255, 0.4);
+        }
+    </style>
+</head>
+
+<body data-page="dashboard">
+
+    <!-- Auth guard -->
+    <script>
+        (function () {
+            const token = localStorage.getItem('lendit_token');
+            if (!token) { window.location.replace('login.html'); }
+        })();
+    </script>
+
+    <nav class="navbar scrolled" id="navbar">
+        <div class="nav-inner">
+            <a href="index.html" class="logo"><span class="logo-icon">🔧</span><span class="logo-text">Lend<span
+                        class="logo-accent">It</span></span></a>
+            <ul class="nav-links">
+                <li><a href="index.html#how-it-works">How It Works</a></li>
+                <li><a href="discover.html">Discover</a></li>
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="chat.html">Messages</a></li>
+            </ul>
+            <div class="nav-cta">
+                <a href="chat.html" class="btn-ghost">Messages</a>
+                <button class="btn-primary" onclick="localStorage.clear();window.location.href='login.html'">Log
+                    Out</button>
+            </div>
+            <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+        </div>
+        <div class="mobile-menu" id="mobileMenu">
+            <a href="index.html#how-it-works">How It Works</a>
+            <a href="discover.html">Discover</a>
+            <a href="chat.html">Messages</a>
+        </div>
+    </nav>
+
+    <div class="dashboard-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="user-profile">
+                <div class="user-avatar" id="dashAvatar">?</div>
+                <div class="user-name" id="dashName">Loading...</div>
+                <div id="dashRoleBadge" style="margin-top:6px"></div>
+                <div class="user-role" id="dashRole">Member</div>
+            </div>
+            <nav class="sidebar-nav" id="sidebarNav">
+                <!-- Injected by JS based on role -->
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="dashboard-main" id="dashMain">
+            <!-- Injected dynamically by JS -->
+            <div style="display:flex;align-items:center;justify-content:center;height:300px;color:var(--text-muted)">
+                <div style="text-align:center">
+                    <div style="font-size:3rem;margin-bottom:12px">⏳</div>
+                    <p>Loading your dashboard...</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="app.js?v=42"></script>
+</body>
+
+</html>

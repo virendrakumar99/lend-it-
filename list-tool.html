@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>List Your Tool – LendIt</title>
+    <meta name="description" content="List your tool on LendIt and start earning in INR from your neighbourhood.">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body data-page="list-tool">
+
+    <nav class="navbar scrolled" id="navbar">
+        <div class="nav-inner">
+            <a href="index.html" class="logo"><span class="logo-icon">🔧</span><span class="logo-text">Lend<span
+                        class="logo-accent">It</span></span></a>
+            <ul class="nav-links">
+                <li><a href="discover.html">Discover</a></li>
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="chat.html">Messages</a></li>
+            </ul>
+            <div class="nav-cta">
+                <a href="dashboard.html" class="btn-ghost">← My Dashboard</a>
+            </div>
+            <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+        </div>
+        <div class="mobile-menu" id="mobileMenu">
+            <a href="discover.html">Discover</a>
+            <a href="dashboard.html">Dashboard</a>
+        </div>
+    </nav>
+
+    <div class="list-tool-page">
+
+        <!-- Form -->
+        <div class="list-form-card">
+            <div
+                style="display:inline-flex;align-items:center;gap:8px;background:rgba(0,201,167,0.12);border:1px solid rgba(0,201,167,0.3);color:#00C9A7;padding:6px 14px;border-radius:50px;font-size:0.8rem;font-weight:700;margin-bottom:20px">
+                ₹ All amounts in Indian Rupees (INR)
+            </div>
+            <h1 class="list-form-title">List Your Tool</h1>
+            <p class="list-form-subtitle">Fill in the details below to publish your tool and start earning 💸</p>
+
+            <div class="inr-note">
+                💡 All transactions on LendIt are processed in <strong>₹ INR</strong>. Funds are held in escrow until
+                the tool is safely returned.
+            </div>
+
+            <form id="listToolForm">
+                <!-- Basic Info -->
+                <div
+                    style="font-size:0.78rem;color:#9B97B2;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid rgba(255,255,255,0.07)">
+                    Basic Information</div>
+
+                <div class="form-group">
+                    <label>Tool / Item Name *</label>
+                    <input type="text" id="lt-title" class="form-input" placeholder="e.g. Bosch Power Drill" required>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Category *</label>
+                        <select id="lt-category" class="form-input" required>
+                            <option value="power-tools">🔧 Power Tools</option>
+                            <option value="garden">🌿 Garden & Outdoor</option>
+                            <option value="home">🏠 Home & DIY</option>
+                            <option value="cleaning">🧹 Cleaning</option>
+                            <option value="construction">🔨 Construction</option>
+                            <option value="vehicles">🚗 Vehicles & Transport</option>
+                            <option value="electronics">💻 Electronics</option>
+                            <option value="sports">⚽ Sports & Leisure</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Condition *</label>
+                        <select id="lt-condition" class="form-input" required>
+                            <option value="excellent">✨ Excellent – Like New</option>
+                            <option value="good">👍 Good – Minor Wear</option>
+                            <option value="fair">🙂 Fair – Works Perfectly</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="lt-description" class="form-input"
+                        placeholder="Describe the tool – brand, model, features, what it's suitable for, accessories included..."></textarea>
+                </div>
+
+                <!-- Pricing -->
+                <div
+                    style="font-size:0.78rem;color:#9B97B2;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid rgba(255,255,255,0.07);margin-top:8px">
+                    Pricing (INR ₹)</div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Rental Price per Day *</label>
+                        <div class="price-input-wrap">
+                            <span class="price-currency-icon">₹</span>
+                            <input type="number" id="lt-price" class="form-input" placeholder="0" min="1" required>
+                        </div>
+                        <div style="font-size:0.75rem;color:#9B97B2;margin-top:6px">Avg. tools: ₹99–₹999/day</div>
+                    </div>
+                    <div class="form-group">
+                        <label>Security Deposit *</label>
+                        <div class="price-input-wrap">
+                            <span class="price-currency-icon">₹</span>
+                            <input type="number" id="lt-deposit" class="form-input" placeholder="0" min="0" required>
+                        </div>
+                        <div style="font-size:0.75rem;color:#9B97B2;margin-top:6px">Refunded after safe return</div>
+                    </div>
+                </div>
+
+                <!-- Location -->
+                <div
+                    style="font-size:0.78rem;color:#9B97B2;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid rgba(255,255,255,0.07)">
+                    Location & Availability</div>
+
+                <div class="form-group">
+                    <label>Pickup Location / Area *</label>
+                    <input type="text" id="lt-location" class="form-input" placeholder="e.g. Koramangala, Bangalore"
+                        required>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Min. Rental Duration</label>
+                        <select id="lt-mindays" class="form-input">
+                            <option value="1">1 day minimum</option>
+                            <option value="2">2 days minimum</option>
+                            <option value="3">3 days minimum</option>
+                            <option value="7">1 week minimum</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Max. Rental Duration</label>
+                        <select id="lt-maxdays" class="form-input">
+                            <option value="7">Up to 1 week</option>
+                            <option value="14" selected>Up to 2 weeks</option>
+                            <option value="30">Up to 1 month</option>
+                            <option value="90">Up to 3 months</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Rules -->
+                <div
+                    style="font-size:0.78rem;color:#9B97B2;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid rgba(255,255,255,0.07)">
+                    Rules & Extra Info</div>
+
+                <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:24px">
+                    <label style="display:flex;align-items:center;gap:12px;cursor:pointer;font-size:0.9rem">
+                        <input type="checkbox" id="lt-delivery" style="width:16px;height:16px;accent-color:#6C63FF"> I
+                        can deliver within 5 km (for a small fee)
+                    </label>
+                    <label style="display:flex;align-items:center;gap:12px;cursor:pointer;font-size:0.9rem">
+                        <input type="checkbox" id="lt-instructions" checked
+                            style="width:16px;height:16px;accent-color:#6C63FF"> I'll provide usage instructions
+                    </label>
+                    <label style="display:flex;align-items:center;gap:12px;cursor:pointer;font-size:0.9rem">
+                        <input type="checkbox" id="lt-accessories" style="width:16px;height:16px;accent-color:#6C63FF">
+                        Accessories are included
+                    </label>
+                </div>
+
+                <button type="submit" class="btn-primary"
+                    style="width:100%;justify-content:center;padding:16px;font-size:1rem;border-radius:14px">
+                    🚀 Publish Listing
+                </button>
+
+                <div style="text-align:center;margin-top:16px;font-size:0.8rem;color:#9B97B2;line-height:1.6">
+                    By listing, you agree to our <a href="#" style="color:#6C63FF">Lender Terms</a>. LendIt takes a 5%
+                    service fee per successful rental.
+                </div>
+            </form>
+        </div>
+
+        <!-- Preview Card -->
+        <div>
+            <div class="list-preview-card">
+                <div class="list-preview-title">📱 Live Preview</div>
+                <div id="toolPreview"></div>
+
+                <div style="margin-top:20px;padding-top:20px;border-top:1px solid rgba(255,255,255,0.07)">
+                    <div style="font-size:0.8rem;font-weight:700;color:#9B97B2;margin-bottom:12px">How Earning Works
+                    </div>
+                    <div style="display:flex;flex-direction:column;gap:10px;font-size:0.85rem">
+                        <div style="display:flex;align-items:flex-start;gap:10px">
+                            <div
+                                style="width:24px;height:24px;background:rgba(108,99,255,0.2);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:0.7rem;font-weight:800;color:#8B85FF">
+                                1</div>
+                            <span style="color:#9B97B2">Borrower sends a booking request with rental dates</span>
+                        </div>
+                        <div style="display:flex;align-items:flex-start;gap:10px">
+                            <div
+                                style="width:24px;height:24px;background:rgba(108,99,255,0.2);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:0.7rem;font-weight:800;color:#8B85FF">
+                                2</div>
+                            <span style="color:#9B97B2">Borrower pays securely – funds held in escrow (₹)</span>
+                        </div>
+                        <div style="display:flex;align-items:flex-start;gap:10px">
+                            <div
+                                style="width:24px;height:24px;background:rgba(108,99,255,0.2);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:0.7rem;font-weight:800;color:#8B85FF">
+                                3</div>
+                            <span style="color:#9B97B2">Geofence check-in confirms handover → timer starts</span>
+                        </div>
+                        <div style="display:flex;align-items:flex-start;gap:10px">
+                            <div
+                                style="width:24px;height:24px;background:rgba(0,201,167,0.2);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:0.7rem;font-weight:800;color:#00C9A7">
+                                ✓</div>
+                            <span style="color:#9B97B2">After safe return, funds released to your account!</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div
+                    style="margin-top:20px;padding:14px;background:rgba(0,201,167,0.08);border:1px solid rgba(0,201,167,0.2);border-radius:12px;font-size:0.82rem;color:#00C9A7">
+                    💡 <strong>Top earners</strong> on LendIt make <strong>₹8,000–₹25,000/month</strong> from unused
+                    tools.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js?v=2"></script>
+</body>
+
+</html>
